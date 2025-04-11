@@ -1,48 +1,40 @@
 # Web Maker AI
 
-A web application that allows users to describe what they want to build, and instantly generates code using the DeepSeek R1 Zero AI model.
+Web Maker AI is a powerful web application that generates HTML, CSS, and JavaScript code based on your ideas using AI technology.
 
 ## Features
 
-- Input your idea in natural language
-- Generate complete HTML+CSS+JS code with the click of a button
-- Copy the generated code with a single click
-- Run and preview the generated code in real-time
-- Modern, responsive UI design
+- **AI-Powered Code Generation**: Describe your idea and get complete code instantly
+- **Customization Options**: Choose themes, libraries, layouts, and features
+- **Live Preview**: Instantly see how your code looks and functions
+- **Code Editing**: Edit generated code manually or using AI instructions
+- **Code Collapsing**: Better handle large code outputs
+- **Responsive Design**: Works across all devices and screen sizes
 
-## How It Works
+## Technologies Used
 
-1. The user enters their idea (e.g., "Make a button that changes color when clicked")
-2. The app sends this prompt to the DeepSeek R1 Zero model via OpenRouter API
-3. The AI generates a complete HTML file with inline CSS and JavaScript
-4. The code is displayed and can be run in a preview iframe
-
-## Tech Stack
-
-- HTML5
-- CSS3
-- Vanilla JavaScript
-- OpenRouter API
-- DeepSeek R1 Zero model
+- HTML, CSS, JavaScript
+- DeepSeek R1 Zero AI model (via OpenRouter API)
+- Modern UI/UX design principles
 
 ## Getting Started
 
-1. Clone this repository
-2. Open `index.html` in your browser
-3. Enter your idea and click "Generate Code"
+1. Clone the repository:
+   ```
+   git clone https://github.com/Maruf52230/aimaker.git
+   ```
 
-## API Configuration
+2. Open `index.html` in your browser to start using Web Maker AI.
 
-The application uses the OpenRouter API to access the DeepSeek R1 Zero model. The API key is included in the code for demonstration purposes. In a production environment, you should:
+## How to Use
 
-1. Secure your API key using environment variables or a server-side approach
-2. Implement appropriate rate limiting
-3. Add error handling for API quota limitations
+1. Enter your idea in the input section
+2. Select customization options (theme, libraries, layout, features)
+3. Click "Generate Code"
+4. View and edit the generated code
+5. Use the preview panel to see your creation
+6. Use AI editing to make changes with natural language instructions
 
 ## License
 
-MIT
-
-## Credits
-
-Created for demonstration purposes. 
+[MIT License](LICENSE) 
