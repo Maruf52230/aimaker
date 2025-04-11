@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Maker AI - Preview</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: sans-serif;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">Loading preview...</div>
+  
+  <script>
+    // Function to handle direct code injection
+    function renderPreview() {
+      // Get the code from localStorage
+      let code = localStorage.getItem('webMakerAIPreviewCode');
+      
+      if (code) {
+        // Remove Live Server WebSocket code if present
+        const liveServerMatch = code.match(/\/\/ <!\[CDATA\[\s*\(function\(\) \{\s*const protocol = window\.location\.protocol.*?\/\/ \]\]>/s);
+        if (liveServerMatch) {
+          code = code.replace(liveServerMatch[0], '');
+        }
+        
+        // Also strip any console.log related to Live Server
+        code = code.replace(/console\.log\('Live reload enabled\.'\);/g, '');
+        code = code.replace(/sessionStorage && !sessionStorage\.getItem\('IsThisFirstTime_Log_From_LiveServer'\).*?}/gs, '');
+        
+        // Clear the current body content
+        document.body.innerHTML = '';
+        
+        // Create a new document
+        const parser = new DOMParser();
+        const htmlDoc = parser.parseFromString(code, 'text/html');
+        
+        // Extract and apply styles
+        const styles = htmlDoc.querySelectorAll('style');
+        styles.forEach(style => {
+          document.head.appendChild(style.cloneNode(true));
+        });
+        
+        // Extract and apply external stylesheets
+        const links = htmlDoc.querySelectorAll('link[rel="stylesheet"]');
+        links.forEach(link => {
+          document.head.appendChild(link.cloneNode(true));
+        });
+        
+        // Extract and apply scripts
+        const scripts = htmlDoc.querySelectorAll('script');
+        scripts.forEach(script => {
+          const newScript = document.createElement('script');
+          
+          // Copy attributes
+          Array.from(script.attributes).forEach(attr => {
+            newScript.setAttribute(attr.name, attr.value);
+          });
+          
+          // Copy content
+          newScript.textContent = script.textContent;
+          
+          // Append to document
+          document.body.appendChild(newScript);
+        });
+        
+        // Apply body content (excluding scripts which we already handled)
+        const bodyContent = htmlDoc.body.innerHTML;
+        document.body.innerHTML = bodyContent;
+        
+        // Set the page title
+        const titleElement = htmlDoc.querySelector('title');
+        if (titleElement) {
+          document.title = titleElement.textContent + ' | Web Maker AI Preview';
+        }
+      } else {
+        // Display a message if no code is available
+        document.body.innerHTML = '<div id="loading">No preview code available. Please generate code first.</div>';
+      }
+    }
+    
+    // Render preview when the page loads
+    document.addEventListener('DOMContentLoaded', renderPreview);
+    
+    // Listen for messages from the parent window
+    window.addEventListener('message', (event) => {
+      if (event.origin === window.location.origin && event.data.type === 'update-preview') {
+        const updatedCode = event.data.code;
+        
+        // Update localStorage
+        localStorage.setItem('webMakerAIPreviewCode', updatedCode);
+        
+        // Re-render the preview
+        renderPreview();
+      }
+    });
+  </script>
+</body>
+</html>
